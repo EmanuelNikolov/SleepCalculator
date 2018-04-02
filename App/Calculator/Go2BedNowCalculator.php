@@ -24,7 +24,7 @@ class Go2BedNowCalculator implements CalculatorInterface
     /**
      * @var DateTime
      */
-    private $calculation;
+    private $timeAsleep;
 
     public function setAsleepTime(DateTime $time): void
     {
@@ -54,10 +54,11 @@ class Go2BedNowCalculator implements CalculatorInterface
         $tempTime = $this->asleepTime;
         $tempTime->add(new DateInterval("PT{$interval}M"));
         $this->setWakeTime($tempTime);
+        $this->timeAsleep = $tempTime->diff($this->asleepTime);
     }
 
-    public function getCalculation(): DateTime
+    public function getTimeAsleep(): DateTime
     {
-        return $this->calculation;
+        return $this->timeAsleep;
     }
 }

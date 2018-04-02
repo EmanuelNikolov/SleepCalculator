@@ -20,5 +20,5 @@ interface CalculatorInterface
 
     public function calculate(): void;
 
-    public function getCalculation(): DateTime;
+    public function getTimeAsleep(): DateTime;
 }
