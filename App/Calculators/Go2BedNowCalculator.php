@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Calculator;
+namespace App\Calculators;
 
 
 use DateInterval;
@@ -9,7 +9,7 @@ use DateTime;
 class Go2BedNowCalculator implements CalculatorInterface
 {
 
-    public const RECOMMENDED_SLEEP_CYCLES = 6;
+    public const RECOMMENDED_SLEEP_CYCLES = 5;
 
     /**
      * @var DateTime
@@ -21,10 +21,13 @@ class Go2BedNowCalculator implements CalculatorInterface
      */
     private $wakeTime;
 
-    /**
-     * @var DateTime
-     */
     private $timeAsleep;
+
+    public function __construct(DateTime $startTime)
+    {
+        $this->setAsleepTime($startTime);
+        $this->calculate();
+    }
 
     public function setAsleepTime(DateTime $time): void
     {
@@ -48,11 +51,14 @@ class Go2BedNowCalculator implements CalculatorInterface
 
     public function calculate(): void
     {
-        $interval =
+        $sleepInterval =
           CalculatorInterface::SLEEP_CYCLE * self::RECOMMENDED_SLEEP_CYCLES;
 
+        $sleepIntervalFinal =
+          CalculatorInterface::FALL_ASLEEP_TIME + $sleepInterval;
+
         $tempTime = $this->asleepTime;
-        $tempTime->add(new DateInterval("PT{$interval}M"));
+        $tempTime->add(new DateInterval("PT{$sleepIntervalFinal}M"));
         $this->setWakeTime($tempTime);
         $this->timeAsleep = $tempTime->diff($this->asleepTime);
     }

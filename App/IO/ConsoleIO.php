@@ -13,6 +13,6 @@ class ConsoleIO implements IOInterface
 
     public function write(string $text): void
     {
-        echo $text;
+        echo $text . PHP_EOL;
     }
 }
