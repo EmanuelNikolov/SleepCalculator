@@ -4,7 +4,7 @@ namespace App;
 
 
 use App\Calculators\CalculatorInterface;
-use App\Calculators\Go2BedNowCalculator;
+use App\Calculators\Calculator;
 use App\IO\IOInterface;
 use DateTime;
 use DateTimeZone;
@@ -13,7 +13,8 @@ class ConsoleApp implements ApplicationInterface
 {
 
     private const CONSOLE_PROMPT =
-      "Press Enter to calculate when to get up if you go to bed now";
+      "On the next line input desired number of sleep cycles!" .
+      "(if omitted, default value of 5 will be used";
 
     /**
      * @var CalculatorInterface
@@ -32,7 +33,6 @@ class ConsoleApp implements ApplicationInterface
 
     public function start(): void
     {
-        $this->inputData();
         $this->processData();
         $this->io->write($this->outputData());
     }
@@ -47,17 +47,14 @@ class ConsoleApp implements ApplicationInterface
         return $this->io;
     }
 
-    public function inputData(): void
-    {
-        $this->io->write(self::CONSOLE_PROMPT);
-        $this->io->read();
-    }
-
     public function processData(): void
     {
+        $this->io->write(self::CONSOLE_PROMPT);
+        $sleepCycles = intval($this->io->read());
+
         $currentTimeZone = new DateTimeZone('Europe/Sofia');
         $dateTime = new DateTime('now', $currentTimeZone);
-        $this->calculator = new Go2BedNowCalculator($dateTime);
+        $this->calculator = new Calculator($dateTime, $sleepCycles);
     }
 
     public function outputData(): string

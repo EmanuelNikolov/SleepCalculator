@@ -17,8 +17,6 @@ interface ApplicationInterface
 
     public function getIO(): IOInterface;
 
-    public function inputData(): void;
-
     public function processData(): void;
 
     public function outputData(): string;

@@ -6,10 +6,8 @@ namespace App\Calculators;
 use DateInterval;
 use DateTime;
 
-class Go2BedNowCalculator implements CalculatorInterface
+class Calculator implements CalculatorInterface
 {
-
-    public const RECOMMENDED_SLEEP_CYCLES = 5;
 
     /**
      * @var DateTime
@@ -23,9 +21,12 @@ class Go2BedNowCalculator implements CalculatorInterface
 
     private $timeAsleep;
 
-    public function __construct(DateTime $startTime)
+    private $sleepCycles;
+
+    public function __construct(DateTime $startTime, int $sleepCycles)
     {
         $this->setAsleepTime($startTime);
+        $this->setSleepCycles($sleepCycles);
         $this->calculate();
     }
 
@@ -52,7 +53,7 @@ class Go2BedNowCalculator implements CalculatorInterface
     public function calculate(): void
     {
         $sleepInterval =
-          CalculatorInterface::SLEEP_CYCLE * self::RECOMMENDED_SLEEP_CYCLES;
+          CalculatorInterface::SLEEP_CYCLE * $this->sleepCycles;
 
         $sleepIntervalFinal =
           CalculatorInterface::FALL_ASLEEP_TIME + $sleepInterval;
@@ -66,5 +67,19 @@ class Go2BedNowCalculator implements CalculatorInterface
     public function getTimeAsleep(): DateTime
     {
         return $this->timeAsleep;
+    }
+
+    public function setSleepCycles(int $sleepCycles): void
+    {
+        if (empty($sleepCycles)) {
+            $this->sleepCycles = CalculatorInterface::RECOMMENDED_SLEEP_CYCLES;
+        } else {
+            $this->sleepCycles = $sleepCycles;
+        }
+    }
+
+    public function getSleepCycles(): int
+    {
+        return $this->sleepCycles;
     }
 }
