@@ -12,10 +12,6 @@ use DateTimeZone;
 class ConsoleApp implements ApplicationInterface
 {
 
-    private const CONSOLE_PROMPT =
-      "On the next line input desired number of sleep cycles!" .
-      "(if omitted, default value of 5 will be used";
-
     /**
      * @var CalculatorInterface
      */
@@ -34,7 +30,7 @@ class ConsoleApp implements ApplicationInterface
     public function start(): void
     {
         $this->processData();
-        $this->io->write($this->outputData());
+        $this->outputData();
     }
 
     public function getCalculator(): CalculatorInterface
@@ -49,7 +45,7 @@ class ConsoleApp implements ApplicationInterface
 
     public function processData(): void
     {
-        $this->io->write(self::CONSOLE_PROMPT);
+        $this->io->write($this->io->getPrompt());
         $sleepCycles = intval($this->io->read());
 
         $currentTimeZone = new DateTimeZone('Europe/Sofia');
@@ -57,10 +53,10 @@ class ConsoleApp implements ApplicationInterface
         $this->calculator = new Calculator($dateTime, $sleepCycles);
     }
 
-    public function outputData(): string
+    public function outputData(): void
     {
         $wakeUpTime = $this->calculator->getWakeTime()->format('H:i');
 
-        return "You should get up at {$wakeUpTime}";
+        $this->io->write("You should get up at {$wakeUpTime}");
     }
 }

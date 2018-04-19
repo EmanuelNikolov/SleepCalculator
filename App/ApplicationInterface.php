@@ -19,5 +19,5 @@ interface ApplicationInterface
 
     public function processData(): void;
 
-    public function outputData(): string;
+    public function outputData(): void;
 }
